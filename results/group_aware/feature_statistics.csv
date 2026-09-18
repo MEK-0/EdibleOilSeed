@@ -1,0 +1,3 @@
+DL_Model,Feature_Shape,Total_Samples,Feature_Dimension,Class_Count,NaN_Count,Inf_Count,Exact_Duplicate_Features,Unique_Features
+VGG16,"(10111, 512)",10111,512,6,0,0,8,10103
+InceptionV3,"(10111, 2048)",10111,2048,6,0,0,8,10103
