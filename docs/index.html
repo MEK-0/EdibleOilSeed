@@ -3,54 +3,218 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Academic technical report for edible oil seed classification with standard and group-aware validation.">
-  <title>Edible Oil Seed Classification | Research Project</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="assets/lang-data.js" defer></script>
-  <script src="script.js" defer></script>
+  <meta name="description" content="Research article on edible oil seed classification using VGG16, InceptionV3, machine learning and group-aware validation.">
+  <title>Classification of Edible Oil Seeds</title>
+  <style>
+    :root{--ink:#000;--soft:#303030;--muted:#666;--line:#cfcfcf;--wash:#f2f2f2;--paper:#fff;--max:1180px}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:#e9e9e9;color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.55}
+    a{color:var(--ink);text-decoration-thickness:1px;text-underline-offset:3px}
+    a:hover{color:var(--muted)}
+    .paper{width:min(var(--max),calc(100% - 32px));margin:28px auto;background:var(--paper);box-shadow:0 0 0 1px #d5d5d5;padding:54px 62px 44px}
+    .masthead{text-align:center;border-bottom:2px solid var(--ink);padding-bottom:24px;margin-bottom:24px}
+    .eyebrow{font-family:Arial,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin:0 0 14px}
+    h1{font-size:clamp(2rem,4vw,3.55rem);line-height:1.03;letter-spacing:-.035em;margin:0 auto 18px;max-width:980px}
+    .authors{font-size:1.08rem;margin:0 0 6px}
+    .affiliation,.meta{font-size:.9rem;color:var(--soft);margin:3px 0}
+    .quick-links{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px;font-family:Arial,sans-serif}
+    .quick-links a{border:1px solid #000;padding:8px 12px;text-decoration:none;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+    .quick-links a:first-child{background:#000;color:#fff}
+    .abstract-grid{display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid var(--ink);padding-bottom:22px;margin-bottom:22px}
+    .article-info{background:var(--wash);padding:18px;font-family:Arial,sans-serif;font-size:.76rem;line-height:1.5}
+    .article-info strong{display:block;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+    .abstract{padding-left:26px}
+    .abstract h2,.turkish h2{font-family:Arial,sans-serif;font-size:.82rem;letter-spacing:.1em;margin:0 0 8px}
+    .abstract p,.turkish p{font-size:.91rem;text-align:justify;margin:0 0 10px}
+    .keywords{font-size:.82rem!important}
+    .turkish{border-top:1px solid var(--line);margin-top:14px;padding-top:14px}
+    .toc{border:1px solid var(--ink);padding:18px 22px;margin:24px 0;font-family:Arial,sans-serif}
+    .toc h2{margin:0 0 10px;font-size:.85rem;text-transform:uppercase;letter-spacing:.1em}
+    .toc ol{columns:3;column-gap:28px;margin:0;padding-left:20px;font-size:.78rem}
+    .toc li{break-inside:avoid;margin:4px 0}
+    .article{column-count:2;column-gap:38px;column-rule:1px solid #ddd;text-align:justify}
+    section{break-inside:auto}
+    h2.section-title{break-after:avoid-column;font-family:Arial,sans-serif;font-size:1.05rem;line-height:1.25;margin:22px 0 8px;padding-top:5px;border-top:2px solid var(--ink);text-align:left}
+    h3{break-after:avoid-column;font-family:Arial,sans-serif;font-size:.88rem;line-height:1.3;margin:16px 0 6px;text-align:left}
+    p{font-size:.91rem;margin:0 0 11px;orphans:3;widows:3}
+    .lead:first-letter{float:left;font-size:2.9rem;line-height:.8;padding:7px 7px 0 0;font-weight:700}
+    figure,.table-wrap,.note,.repo-tree{break-inside:avoid-column;margin:16px 0}
+    figure{border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:12px 0}
+    figcaption,caption{font-size:.72rem;font-style:italic;text-align:center;color:var(--soft);padding:7px 4px 0}
+    svg{display:block;width:100%;height:auto;background:#fff}
+    table{border-collapse:collapse;width:100%;font-family:Arial,sans-serif;font-size:.69rem;text-align:left}
+    caption{caption-side:top;padding:0 0 6px}
+    th,td{border:1px solid #d7d7d7;padding:6px 7px;vertical-align:middle}
+    thead th{background:#000;color:#fff;font-weight:700}
+    tbody tr:nth-child(even){background:#f3f3f3}
+    td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+    .best{font-weight:800;text-decoration:underline;text-underline-offset:2px}
+    .note{border-left:4px solid #000;background:#f1f1f1;padding:12px 14px;font-size:.8rem;text-align:left}
+    .note strong{font-family:Arial,sans-serif}
+    .repo-tree{background:#fff;color:#000;padding:16px 18px;overflow:auto;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre}
+    .declarations{column-span:all;border-top:2px solid #000;margin-top:26px;padding-top:18px;display:grid;grid-template-columns:repeat(2,1fr);gap:18px 34px}
+    .declarations h2{font:700 .82rem Arial,sans-serif;letter-spacing:.08em;margin:0 0 6px}
+    .declarations p{font-size:.82rem}
+    .references{column-span:all;border-top:2px solid #000;margin-top:24px;padding-top:18px}
+    .references h2{font:700 1rem Arial,sans-serif;margin:0 0 10px}
+    .references ol{columns:2;column-gap:42px;margin:0;padding-left:22px;font-size:.75rem}
+    .references li{break-inside:avoid;margin:0 0 7px}
+    footer{column-span:all;margin-top:28px;padding-top:18px;border-top:1px solid #000;display:flex;justify-content:space-between;gap:16px;font:700 .72rem Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em}
+    .screen-only{display:inline}
+    @media(max-width:850px){
+      .paper{width:100%;margin:0;box-shadow:none;padding:30px 22px}
+      .abstract-grid{grid-template-columns:1fr}.abstract{padding:18px 0 0}.article-info{display:grid;grid-template-columns:1fr 1fr;gap:5px 20px}
+      .toc ol{columns:2}.article{column-count:1;column-rule:0}.declarations{grid-template-columns:1fr}.references ol{columns:1}
+    }
+    @media(max-width:520px){.toc ol{columns:1}.article-info{display:block}.quick-links a{width:100%}h1{font-size:2rem}}
+    @media print{
+      @page{size:A4;margin:14mm}
+      body{background:#fff}.paper{width:auto;margin:0;padding:0;box-shadow:none}.quick-links,.screen-only{display:none}
+      .article{column-count:2;column-gap:9mm}.toc{break-after:page}a{text-decoration:none}
+    }
+  </style>
 </head>
 <body>
-<a class="skip-link" href="#main" data-i18n="skip">Skip to report</a>
-<div class="page">
-  <header>
-    <div class="institution"><div><strong data-i18n="researchProject">Research Project</strong><br><span data-i18n="computerVision">Computer Vision and Machine Learning</span></div><nav class="language" aria-label="Language / Dil">[<a href="?lang=en" data-lang="en" lang="en" aria-current="true">English</a>] | [<a href="?lang=tr" data-lang="tr" lang="tr">Türkçe</a>]</nav></div>
-    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="#top" data-i18n="home">Home</a> &gt; <a href="#overview" data-i18n="projects">Research Projects</a> &gt; <span data-i18n="shortTitle">Edible Oil Seed Classification</span></nav>
+<main class="paper" id="top">
+  <header class="masthead">
+    <p class="eyebrow">Tubitak 2209-A Research Article</p>
+    <h1>Classification of Edible Oil Seeds Using Hybrid Deep Learning and Machine Learning Methods</h1>
+    <p class="authors">Mahmut Esat Kolay · Murat Köklü</p>
+    <p class="affiliation">Selcuk University · Faculty of Technology · Department of Computer Engineering · Konya, Türkiye</p>
+    <p class="meta">10,111 images · 6 seed classes · 10 hybrid models · Standard and group-aware validation</p>
+    <nav class="quick-links" aria-label="Article links">
+      <a href="#abstract">Read article</a><a href="#results">Results</a><a href="#group-aware">Group-aware validation</a><a href="#repository">Project structure</a>
+    </nav>
   </header>
 
-  <main id="main">
-    <section id="top" class="hero" aria-labelledby="page-title">
-      <p class="eyebrow">TÜBİTAK 2209-A</p>
-      <h1 id="page-title" data-i18n="title">Classification of Edible Oil Seeds Using Hybrid Deep Learning and Machine Learning Methods</h1>
-      <p class="authors">Mahmut Esat Kolay · Murat Köklü</p>
-      <p data-i18n="affiliation">Selçuk University · Faculty of Technology · Department of Computer Engineering · Konya, Türkiye</p>
-      <p data-i18n="date">Project date: May 2026</p>
-      <div class="hero-links"><a class="button" href="https://github.com/MEK-0/EdibleOilSeed/blob/main/output2209/M%C3%BChTasar%C4%B1mRapor1.pdf?raw=1" data-i18n="viewManuscript">View Manuscript</a><a class="button button-light" href="https://github.com/MEK-0/EdibleOilSeed" data-i18n="viewRepository">View Repository</a></div>
+  <section class="abstract-grid" id="abstract">
+    <aside class="article-info">
+      <strong>Article info</strong>
+      <div>Type: Research Article</div><div>Dataset: 10,111 images</div><div>Classes: 6</div><div>Models: 10</div><div>Primary validation: Stratified 10-fold CV</div><div>Robustness test: Group-aware 5-fold CV</div>
+    </aside>
+    <div class="abstract">
+      <h2>ABSTRACT</h2>
+      <p>This study presents a hybrid classification framework for distinguishing six edible oil seed classes using fixed deep convolutional representations and conventional machine learning. The data set contains 10,111 images of black sesame, groundnut, mustard, soybean, sunflower and white sesame. ImageNet-pretrained VGG16 and InceptionV3 produced 512- and 2048-dimensional feature vectors, which were classified using support vector machine, random forest, k-nearest neighbor, gradient boosting and multilayer perceptron algorithms. Under stratified 10-fold cross-validation, VGG16-MLP achieved 99.8318% accuracy and 99.8340% macro F1-score. A feature-space group-aware stress test was then used to examine whether highly similar observations distributed across folds explained the near-perfect performance. Under group-aware 5-fold validation, VGG16-MLP retained 99.7429% accuracy and InceptionV3-SVM retained 99.6143%. The limited decrease indicates that simple near-duplicate leakage was not the principal explanation for the observed performance. Pseudo-grouping nevertheless does not replace acquisition-session grouping or independent external validation.</p>
+      <p class="keywords"><strong>Keywords:</strong> edible oil seeds, VGG16, InceptionV3, deep feature extraction, machine learning, group-aware validation</p>
+      <div class="turkish">
+        <h2>ÖZ</h2>
+        <p>Bu çalışmada altı yenilebilir yağ tohumu sınıfının sabit derin özellikler ve klasik makine öğrenmesi yöntemleriyle sınıflandırılması incelenmiştir. Standart tabakalı 10-katlı çapraz doğrulamada en yüksek sonuç VGG16-MLP ile %99,8318 doğruluk ve %99,8340 makro F1 olarak bulunmuştur. Sınıf içi kosinüs benzerliğine dayalı pseudo-group yapısı ve 5-katlı StratifiedGroupKFold değerlendirmesinde VGG16-MLP %99,7429, InceptionV3-SVM ise %99,6143 doğruluk üretmiştir. Küçük performans düşüşü basit yakın-kopya sızıntısının yüksek sonuçların temel nedeni olmadığını göstermektedir; ancak yöntem bağımsız dış veri setinin yerini tutmamaktadır.</p>
+      </div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Contents">
+    <h2>Contents</h2>
+    <ol><li><a href="#introduction">Introduction</a></li><li><a href="#method">Material and Method</a></li><li><a href="#models">Classification Models</a></li><li><a href="#results">Results</a></li><li><a href="#group-aware">Group-Aware Validation</a></li><li><a href="#discussion">Discussion</a></li><li><a href="#limitations">Limitations</a></li><li><a href="#conclusion">Conclusion</a></li><li><a href="#repository">Project Structure</a></li><li><a href="#references">References</a></li></ol>
+  </nav>
+
+  <article class="article">
+    <section id="introduction">
+      <h2 class="section-title">1. INTRODUCTION</h2>
+      <p class="lead">Agricultural products are commonly classified according to species, variety, size, shape, color and quality. Accurate classification directly affects sorting, packaging, storage and quality control. Manual inspection can be sufficient for small quantities, but it becomes slower and less consistent as production volume increases. These limitations have encouraged the use of machine vision and artificial intelligence for rapid, objective and repeatable agricultural product analysis.</p>
+      <p>Earlier agricultural image studies generally combined handcrafted color, texture, geometric or morphological descriptors with conventional classifiers. More recently, convolutional neural networks have reduced the need to define image features manually. A pretrained CNN can be fine-tuned end to end or used as a fixed feature extractor whose output is classified by another learning algorithm. The latter strategy creates a practical bridge between deep representation learning and classical machine learning.</p>
+      <p>VGG16 and InceptionV3 represent different architectural principles. VGG16 uses a regular sequence of 3 × 3 convolutions, whereas InceptionV3 applies parallel operations at multiple spatial scales. When their original classification heads are removed and global average pooling is used, the networks generate compact descriptors suitable for SVM, tree ensembles, neighborhood methods and multilayer perceptrons.</p>
+      <p>The six classes examined here are black sesame, groundnut, mustard, soybean, sunflower and white sesame. Their visual characteristics range from clearly distinct shape and color patterns to partially similar seed structures. The data are also unbalanced: groundnut contains 3,000 observations while white sesame contains 661. Accuracy is therefore interpreted together with macro precision, macro recall and macro F1-score.</p>
+      <p>Near-perfect image-level performance requires careful interpretation. Standard cross-validation can be optimistic if exact duplicates, near-duplicate frames or several photographs from one physical sample are divided between training and test folds. The saved arrays did not contain physical-seed or acquisition-session identifiers. The revised experiment therefore adds a feature-space group-aware validation stress test without repeating CNN inference.</p>
     </section>
 
-    <section class="abstract" aria-labelledby="abstract-title"><h2 id="abstract-title" data-i18n="abstract">Abstract</h2><p data-i18n="abstractText">This study classifies 10,111 images from six edible oil seed classes using fixed VGG16 and InceptionV3 feature representations and five conventional classifiers. The reported standard-validation best model, VGG16–MLP, achieved 99.8318% mean accuracy and 99.8340% macro F1. A separate feature-space group-aware stress test evaluates the stability of this result under near-duplicate constraints.</p></section>
+    <section id="method">
+      <h2 class="section-title">2. MATERIAL AND METHOD</h2>
+      <p>The workflow consisted of data verification, preprocessing documentation, fixed deep feature extraction, machine learning classification, standard cross-validation and group-aware robustness analysis. Publication-stage experiments reused the saved feature and label arrays; no CNN was retrained and image feature extraction was not repeated.</p>
+      <figure>
+        <svg viewBox="0 0 720 440" role="img" aria-labelledby="workflow-title workflow-desc">
+          <title id="workflow-title">Experimental workflow</title><desc id="workflow-desc">Dataset flows through fixed CNN feature representations and machine learning classifiers into standard and group-aware validation.</desc>
+          <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#000"/></marker></defs>
+          <g fill="#f2f2f2" stroke="#000" stroke-width="2"><rect x="170" y="18" width="380" height="62" rx="5"/><rect x="120" y="112" width="480" height="62" rx="5"/><rect x="170" y="206" width="380" height="62" rx="5"/><rect x="35" y="318" width="290" height="72" rx="5"/><rect x="395" y="318" width="290" height="72" rx="5"/></g>
+          <g font-family="Arial" text-anchor="middle" fill="#000"><text x="360" y="43" font-size="20" font-weight="700">Edible oil seed dataset</text><text x="360" y="66" font-size="17">10,111 images · 6 classes</text><text x="360" y="138" font-size="19" font-weight="700">Fixed deep representations</text><text x="360" y="161" font-size="17">VGG16 512-D · InceptionV3 2048-D</text><text x="360" y="232" font-size="19" font-weight="700">Machine learning classifiers</text><text x="360" y="255" font-size="17">SVM · RF · KNN · GB · MLP</text><text x="180" y="344" font-size="18" font-weight="700">Standard estimate</text><text x="180" y="368" font-size="16">Stratified 10-fold CV</text><text x="540" y="342" font-size="18" font-weight="700">Leakage stress test</text><text x="540" y="365" font-size="16">Pseudo-groups · 5-fold</text><text x="540" y="384" font-size="16">StratifiedGroupKFold</text></g>
+          <g stroke="#000" stroke-width="2" marker-end="url(#arrow)"><path d="M360 80V108"/><path d="M360 174V202"/><path d="M360 268L180 312"/><path d="M360 268L540 312"/></g>
+        </svg>
+        <figcaption>Figure 1. Experimental workflow including the standard estimate and group-aware leakage stress test.</figcaption>
+      </figure>
 
-    <nav id="contents" class="contents" aria-labelledby="contents-title"><h2 id="contents-title" data-i18n="contents">Contents</h2><ol><li><a href="#overview" data-i18n="navOverview">Project Overview</a></li><li><a href="#dataset" data-i18n="navDataset">Dataset</a></li><li><a href="#methodology" data-i18n="navMethodology">Methodology</a></li><li><a href="#features" data-i18n="navFeatures">Deep Feature Extraction</a></li><li><a href="#standard" data-i18n="navStandard">Standard Validation Results</a></li><li><a href="#group-aware" data-i18n="navGroup">Group-Aware Validation</a></li><li><a href="#oof" data-i18n="navOof">Out-of-Fold Analysis</a></li><li><a href="#architecture" data-i18n="navArchitecture">Repository Architecture</a></li><li><a href="#manuscript" data-i18n="navManuscript">Manuscript</a></li><li><a href="#limitations" data-i18n="navLimitations">Limitations and Future Work</a></li><li><a href="#resources" data-i18n="navResources">Resources</a></li></ol></nav>
+      <h3>2.1. Edible Oil Seed Data Set</h3>
+      <p>The complete feature-label arrays contain 10,111 observations. VGG16 has a shape of 10,111 × 512 and InceptionV3 has a shape of 10,111 × 2048. Both arrays are float32 and contain no NaN or infinite values.</p>
+      <div class="table-wrap"><table><caption>Table 1. Distribution of the edible oil seed data set.</caption><thead><tr><th>Class</th><th class="num">Samples</th><th class="num">Ratio (%)</th></tr></thead><tbody><tr><td>Black sesame</td><td class="num">1,850</td><td class="num">18.30</td></tr><tr><td>Groundnut</td><td class="num">3,000</td><td class="num">29.67</td></tr><tr><td>Mustard</td><td class="num">1,500</td><td class="num">14.84</td></tr><tr><td>Soybean</td><td class="num">1,531</td><td class="num">15.14</td></tr><tr><td>Sunflower</td><td class="num">1,569</td><td class="num">15.52</td></tr><tr><td>White sesame</td><td class="num">661</td><td class="num">6.54</td></tr><tr><th>Total</th><th class="num">10,111</th><th class="num">100.00</th></tr></tbody></table></div>
+      <figure>
+        <svg viewBox="0 0 720 390" role="img" aria-label="Class distribution bar chart">
+          <g stroke="#ccc" stroke-width="1"><path d="M80 310H685"/><path d="M80 235H685"/><path d="M80 160H685"/><path d="M80 85H685"/></g><g fill="#777" stroke="#000"><rect x="105" y="171" width="65" height="139"/><rect x="202" y="85" width="65" height="225"/><rect x="299" y="198" width="65" height="112"/><rect x="396" y="195" width="65" height="115"/><rect x="493" y="192" width="65" height="118"/><rect x="590" y="260" width="65" height="50"/></g>
+          <g font-family="Arial" font-size="15" text-anchor="middle" fill="#000"><text x="137" y="162">1,850</text><text x="234" y="76">3,000</text><text x="331" y="189">1,500</text><text x="428" y="186">1,531</text><text x="525" y="183">1,569</text><text x="622" y="251">661</text><text x="137" y="334">Black</text><text x="137" y="352">sesame</text><text x="234" y="334">Groundnut</text><text x="331" y="334">Mustard</text><text x="428" y="334">Soybean</text><text x="525" y="334">Sunflower</text><text x="622" y="334">White</text><text x="622" y="352">sesame</text></g><path d="M80 40V310H685" fill="none" stroke="#000" stroke-width="2"/>
+        </svg>
+        <figcaption>Figure 2. Number of observations in each edible oil seed class.</figcaption>
+      </figure>
 
-    <section id="overview"><h2 data-i18n="s1">1. Project Overview</h2><p data-i18n="overviewText">Automated visual identification can support sorting, packaging, storage, and quality control of agricultural products. This work is a machine-vision classification study; it is not a completed industrial sorting system.</p></section>
+      <h3>2.2. Image Preprocessing</h3><p>In the original pipeline, images were resized to 224 × 224 pixels, filtered with a 3 × 3 Gaussian kernel, converted to float32 and divided by 255. These operations were documented but not repeated during the publication-stage classifier experiments.</p>
+      <h3>2.3. Deep Feature Extraction</h3><p>ImageNet-pretrained VGG16 and InceptionV3 were used without their original classification heads. Global average pooling produced 512 features per VGG16 observation and 2,048 features per InceptionV3 observation.</p>
+      <div class="table-wrap"><table><caption>Table 2. Deep feature representations.</caption><thead><tr><th>Backbone</th><th>Input</th><th>Pooling</th><th class="num">Features</th></tr></thead><tbody><tr><td>VGG16</td><td>224 × 224 × 3</td><td>Global average</td><td class="num">512</td></tr><tr><td>InceptionV3</td><td>224 × 224 × 3</td><td>Global average</td><td class="num">2,048</td></tr></tbody></table></div>
+      <h3>2.4. Validation Protocol</h3><p>The primary estimate used StratifiedKFold with 10 splits, shuffle enabled and random_state=42. The same fold indices were reused for every model. Accuracy, macro precision, macro recall and macro F1 were recorded for each fold. Out-of-fold predictions were aggregated so that every observation received one prediction while held outside its training subset.</p>
+    </section>
 
-    <section id="dataset"><h2 data-i18n="s2">2. Dataset</h2><p data-i18n="datasetText">The Edible Oil Seed Dataset (V2) contains six imbalanced classes and 10,111 images. Stratification preserves class proportions across validation folds.</p><div class="table-scroll"><table><caption data-i18n="datasetCaption">Class distribution</caption><thead><tr><th data-i18n="class">Class</th><th data-i18n="images">Images</th></tr></thead><tbody><tr><th>Black sesame</th><td>1,850</td></tr><tr><th>Groundnut</th><td>3,000</td></tr><tr><th>Mustard</th><td>1,500</td></tr><tr><th>Soybean</th><td>1,531</td></tr><tr><th>Sunflower</th><td>1,569</td></tr><tr><th>White sesame</th><td>661</td></tr><tr><th data-i18n="total">Total</th><td>10,111</td></tr></tbody></table></div><p><a href="https://doi.org/10.17632/x7h34tkwcp.2">Edible Oil Seed Dataset (V2), Mendeley Data · DOI: 10.17632/x7h34tkwcp.2</a></p></section>
+    <section id="models">
+      <h2 class="section-title">3. CLASSIFICATION MODELS</h2>
+      <p>Five supervised classifiers were selected to cover complementary decision mechanisms. Linear SVM tests large-margin separability; Random Forest represents bagged tree ensembles; KNN measures local neighborhood structure; Gradient Boosting constructs a sequential ensemble; and MLP learns a nonlinear boundary on fixed features. No hyperparameter search was performed.</p>
+      <div class="table-wrap"><table><caption>Table 3. Principal classifier settings.</caption><thead><tr><th>Classifier</th><th>Configuration</th></tr></thead><tbody><tr><td>SVM</td><td>Linear kernel, C=1.0</td></tr><tr><td>Random Forest</td><td>100 trees, random_state=42</td></tr><tr><td>KNN</td><td>k=3, Euclidean distance</td></tr><tr><td>Gradient Boosting</td><td>50 estimators, learning_rate=0.1</td></tr><tr><td>MLP</td><td>100 hidden units, ReLU, Adam, max_iter=1000</td></tr></tbody></table></div>
+      <p>The hybrid design separates representation from the final decision rule. Once the deep descriptors are stored, multiple classifiers and validation strategies can be tested without repeating CNN inference. Feature dimension alone is not a guarantee of quality: the 512-dimensional VGG16 representation proved more effective for four of the five classifiers.</p>
+    </section>
 
-    <section id="methodology"><h2 data-i18n="s3">3. Methodology</h2><p data-i18n="methodText">The original pipeline resized images to 224 × 224, applied a 3 × 3 Gaussian blur, converted values to float32, and normalized pixels by 255. Fixed CNN features were then classified with SVM, Random Forest, KNN, Gradient Boosting, and MLP.</p><div class="process"><span>Raw image → 224 × 224 → Gaussian blur 3 × 3 → float32 → /255 → feature matrix → classifier</span></div></section>
+    <section id="results">
+      <h2 class="section-title">4. RESULTS</h2>
+      <p>All ten backbone-classifier combinations were evaluated under the common stratified 10-fold protocol. VGG16-MLP produced the highest result. InceptionV3-SVM was the strongest Inception-based model.</p>
+      <div class="table-wrap"><table><caption>Table 4. Standard 10-fold results obtained with VGG16 features (%).</caption><thead><tr><th>Model</th><th class="num">Accuracy ± SD</th><th class="num">Precision</th><th class="num">Recall</th><th class="num">F1</th></tr></thead><tbody><tr><td>SVM</td><td class="num">99.6340 ± 0.1403</td><td class="num">99.6659</td><td class="num">99.6251</td><td class="num">99.6444</td></tr><tr><td>RF</td><td class="num">99.4461 ± 0.1939</td><td class="num">99.5548</td><td class="num">99.4069</td><td class="num">99.4777</td></tr><tr><td>KNN</td><td class="num">99.6044 ± 0.2212</td><td class="num">99.6692</td><td class="num">99.5995</td><td class="num">99.6334</td></tr><tr><td>GB</td><td class="num">98.9516 ± 0.3517</td><td class="num">99.1356</td><td class="num">98.9125</td><td class="num">99.0182</td></tr><tr class="best"><td>MLP</td><td class="num">99.8318 ± 0.1716</td><td class="num">99.8368</td><td class="num">99.8322</td><td class="num">99.8340</td></tr></tbody></table></div>
+      <div class="table-wrap"><table><caption>Table 5. Standard 10-fold results obtained with InceptionV3 features (%).</caption><thead><tr><th>Model</th><th class="num">Accuracy ± SD</th><th class="num">Precision</th><th class="num">Recall</th><th class="num">F1</th></tr></thead><tbody><tr class="best"><td>SVM</td><td class="num">99.6439 ± 0.1607</td><td class="num">99.6809</td><td class="num">99.6595</td><td class="num">99.6695</td></tr><tr><td>RF</td><td class="num">98.1010 ± 0.3451</td><td class="num">98.5961</td><td class="num">98.0031</td><td class="num">98.2774</td></tr><tr><td>KNN</td><td class="num">98.7439 ± 0.3702</td><td class="num">99.1119</td><td class="num">98.6651</td><td class="num">98.8753</td></tr><tr><td>GB</td><td class="num">97.9526 ± 0.4082</td><td class="num">98.3000</td><td class="num">97.9033</td><td class="num">98.0905</td></tr><tr><td>MLP</td><td class="num">99.5352 ± 0.1088</td><td class="num">99.5873</td><td class="num">99.5239</td><td class="num">99.5542</td></tr></tbody></table></div>
+      <figure>
+        <svg viewBox="0 0 720 395" role="img" aria-label="Accuracy of ten hybrid models">
+          <g stroke="#ddd"><path d="M70 310H690"/><path d="M70 230H690"/><path d="M70 150H690"/><path d="M70 70H690"/></g><g fill="#777" stroke="#000"><rect x="86" y="92" width="44" height="218"/><rect x="145" y="107" width="44" height="203"/><rect x="204" y="94" width="44" height="216"/><rect x="263" y="147" width="44" height="163"/><rect x="322" y="72" width="44" height="238" fill="#111"/><rect x="381" y="91" width="44" height="219"/><rect x="440" y="215" width="44" height="95"/><rect x="499" y="163" width="44" height="147"/><rect x="558" y="227" width="44" height="83"/><rect x="617" y="100" width="44" height="210"/></g><g font-family="Arial" font-size="12" text-anchor="end" transform="translate(0,0)"><text transform="translate(112 338) rotate(-55)">VGG-SVM</text><text transform="translate(171 338) rotate(-55)">VGG-RF</text><text transform="translate(230 338) rotate(-55)">VGG-KNN</text><text transform="translate(289 338) rotate(-55)">VGG-GB</text><text transform="translate(348 338) rotate(-55)">VGG-MLP</text><text transform="translate(407 338) rotate(-55)">Inc-SVM</text><text transform="translate(466 338) rotate(-55)">Inc-RF</text><text transform="translate(525 338) rotate(-55)">Inc-KNN</text><text transform="translate(584 338) rotate(-55)">Inc-GB</text><text transform="translate(643 338) rotate(-55)">Inc-MLP</text></g><path d="M70 42V310H690" fill="none" stroke="#000" stroke-width="2"/><g font-family="Arial" font-size="13"><text x="22" y="75">100</text><text x="20" y="155">99</text><text x="20" y="235">98</text><text x="20" y="315">97</text></g>
+        </svg>
+        <figcaption>Figure 3. Mean standard 10-fold accuracy of the ten hybrid combinations. The vertical scale is truncated to expose small differences.</figcaption>
+      </figure>
 
-    <section id="features"><h2 data-i18n="s4">4. Deep Feature Extraction</h2><p data-i18n="featureText">ImageNet-pretrained VGG16 and InceptionV3 were used with include_top=False and Global Average Pooling. Saved features were reused for the validation analyses; CNN extraction was not repeated.</p><div class="table-scroll"><table><caption data-i18n="featureCaption">Feature representations</caption><thead><tr><th data-i18n="model">Model</th><th data-i18n="input">Input</th><th data-i18n="pooling">Pooling</th><th data-i18n="dimension">Feature dimension</th></tr></thead><tbody><tr><th>VGG16</th><td>224 × 224 × 3</td><td>Global Average Pooling</td><td>512</td></tr><tr><th>InceptionV3</th><td>224 × 224 × 3</td><td>Global Average Pooling</td><td>2048</td></tr></tbody></table></div></section>
+      <h3>4.1. Out-of-Fold Error Profile</h3>
+      <p>VGG16-MLP produced 10,094 correct out-of-fold predictions and 17 errors among 10,111 observations. All 661 white sesame observations were recognized correctly. The most frequent remaining confusion was black sesame being classified as mustard.</p>
+      <div class="table-wrap"><table><caption>Table 6. VGG16-MLP out-of-fold confusion matrix.</caption><thead><tr><th>True \ Predicted</th><th class="num">Black</th><th class="num">Groundnut</th><th class="num">Mustard</th><th class="num">Soybean</th><th class="num">Sunflower</th><th class="num">White</th></tr></thead><tbody><tr><th>Black sesame</th><td class="num best">1,844</td><td class="num">0</td><td class="num">5</td><td class="num">0</td><td class="num">1</td><td class="num">0</td></tr><tr><th>Groundnut</th><td class="num">0</td><td class="num best">2,999</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">0</td></tr><tr><th>Mustard</th><td class="num">2</td><td class="num">0</td><td class="num best">1,498</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr><tr><th>Soybean</th><td class="num">0</td><td class="num">3</td><td class="num">0</td><td class="num best">1,527</td><td class="num">0</td><td class="num">1</td></tr><tr><th>Sunflower</th><td class="num">0</td><td class="num">3</td><td class="num">0</td><td class="num">1</td><td class="num best">1,565</td><td class="num">0</td></tr><tr><th>White sesame</th><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num best">661</td></tr></tbody></table></div>
+    </section>
 
-    <section id="standard"><h2 data-i18n="s5">5. Standard Validation Results</h2><p data-i18n="standardText">These are the updated manuscript summary values for mean stratified 10-fold cross-validation. Accuracy and macro F1 are shown as percentages.</p><div class="result-grid"><div><h3>VGG16</h3><div class="table-scroll"><table><thead><tr><th data-i18n="model">Model</th><th>Accuracy</th><th>Macro F1</th></tr></thead><tbody><tr><th>SVM</th><td>99.6340%</td><td>99.6444%</td></tr><tr><th>Random Forest</th><td>99.4461%</td><td>99.4777%</td></tr><tr><th>KNN</th><td>99.6044%</td><td>99.6334%</td></tr><tr><th>Gradient Boosting</th><td>98.9516%</td><td>99.0182%</td></tr><tr class="best"><th>MLP</th><td>99.8318%</td><td>99.8340%</td></tr></tbody></table></div></div><div><h3>InceptionV3</h3><div class="table-scroll"><table><thead><tr><th data-i18n="model">Model</th><th>Accuracy</th><th>Macro F1</th></tr></thead><tbody><tr><th>SVM</th><td>99.6439%</td><td>99.6695%</td></tr><tr><th>Random Forest</th><td>98.1010%</td><td>98.2774%</td></tr><tr><th>KNN</th><td>98.7439%</td><td>98.8753%</td></tr><tr><th>Gradient Boosting</th><td>97.9526%</td><td>98.0905%</td></tr><tr><th>MLP</th><td>99.5352%</td><td>99.5542%</td></tr></tbody></table></div></div></div><details><summary data-i18n="historical">Historical Project Results</summary><p data-i18n="historicalText">Earlier repository CSV values are retained separately in the result assets and are not mixed with the updated manuscript summary.</p></details><figure><img src="assets/figures/comparison_accuracy.png" alt="Standard model accuracy comparison" loading="lazy"><figcaption data-i18n="accuracyCaption">Standard accuracy comparison from the retained project figure.</figcaption></figure><figure><img src="assets/figures/comparison_f1_score.png" alt="Standard macro F1 comparison" loading="lazy"><figcaption data-i18n="f1Caption">Standard macro F1 comparison from the retained project figure.</figcaption></figure></section>
+    <section id="group-aware">
+      <h2 class="section-title">5. GROUP-AWARE VALIDATION</h2>
+      <p>True physical-seed and capture-session identifiers were unavailable. Feature vectors were therefore L2-normalized and analyzed separately inside each class using cosine similarity. Connected observations were merged with a Union-Find procedure, ensuring that transitive near-duplicate relationships received one group identifier. Every group was verified to contain a single class label.</p>
+      <p>The selected similarity threshold was 0.9999 for VGG16 and 0.995 for InceptionV3. The resulting pseudo-groups were supplied to StratifiedGroupKFold with five splits, shuffle enabled and random_state=42.</p>
+      <div class="table-wrap"><table><caption>Table 7. Feature-space pseudo-group statistics.</caption><thead><tr><th>Statistic</th><th class="num">VGG16</th><th class="num">InceptionV3</th></tr></thead><tbody><tr><td>Similarity threshold</td><td class="num">0.9999</td><td class="num">0.995</td></tr><tr><td>Total groups</td><td class="num">9,232</td><td class="num">10,082</td></tr><tr><td>Singleton groups</td><td class="num">8,926</td><td class="num">10,059</td></tr><tr><td>Multi-sample groups</td><td class="num">306</td><td class="num">23</td></tr><tr><td>Samples in multi-groups</td><td class="num">1,185</td><td class="num">52</td></tr><tr><td>Grouped samples</td><td class="num">11.72%</td><td class="num">0.51%</td></tr><tr><td>Largest group</td><td class="num">15</td><td class="num">6</td></tr><tr><td>Mean multi-group size</td><td class="num">3.87</td><td class="num">2.26</td></tr><tr><td>Exact duplicate features</td><td class="num">8</td><td class="num">8</td></tr></tbody></table></div>
+      <div class="table-wrap"><table><caption>Table 8. Standard and group-aware estimates for the leading combinations.</caption><thead><tr><th>Model</th><th>Validation</th><th class="num">Accuracy</th><th class="num">Macro F1</th><th class="num">Accuracy Δ</th></tr></thead><tbody><tr><td>VGG16-MLP</td><td>Standard 10-fold</td><td class="num">99.8318%</td><td class="num">99.8340%</td><td class="num">—</td></tr><tr><td>VGG16-MLP</td><td>Group-aware 5-fold</td><td class="num">99.7429%</td><td class="num">99.7416%</td><td class="num">−0.0889 pp</td></tr><tr><td>InceptionV3-SVM</td><td>Standard 10-fold</td><td class="num">99.6439%</td><td class="num">99.6695%</td><td class="num">—</td></tr><tr><td>InceptionV3-SVM</td><td>Group-aware 5-fold</td><td class="num">99.6143%</td><td class="num">99.6494%</td><td class="num">−0.0296 pp</td></tr></tbody></table></div>
+      <figure>
+        <svg viewBox="0 0 720 390" role="img" aria-label="Standard and group-aware accuracy comparison">
+          <g stroke="#ddd"><path d="M80 300H680"/><path d="M80 220H680"/><path d="M80 140H680"/><path d="M80 60H680"/></g><g stroke="#000"><rect x="145" y="70" width="92" height="230" fill="#222"/><rect x="240" y="117" width="92" height="183" fill="#aaa"/><rect x="430" y="170" width="92" height="130" fill="#222"/><rect x="525" y="186" width="92" height="114" fill="#aaa"/></g><g font-family="Arial" text-anchor="middle" fill="#000"><text x="191" y="61" font-size="14">99.8318</text><text x="286" y="108" font-size="14">99.7429</text><text x="476" y="161" font-size="14">99.6439</text><text x="571" y="177" font-size="14">99.6143</text><text x="238" y="328" font-size="16">VGG16-MLP</text><text x="523" y="328" font-size="16">InceptionV3-SVM</text></g><path d="M80 38V300H680" fill="none" stroke="#000" stroke-width="2"/><g font-family="Arial" font-size="13"><rect x="208" y="350" width="22" height="13" fill="#222"/><text x="238" y="361">Standard 10-fold</text><rect x="396" y="350" width="22" height="13" fill="#aaa" stroke="#000"/><text x="426" y="361">Group-aware 5-fold</text></g>
+        </svg>
+        <figcaption>Figure 4. Standard and group-aware accuracy estimates. The vertical axis is truncated to make the small differences visible.</figcaption>
+      </figure>
+      <div class="note"><strong>Interpretation.</strong> VGG16 grouped 1,185 samples, yet accuracy decreased by less than one tenth of a percentage point. This weakens the hypothesis that simple near-duplicate leakage was the primary source of the near-perfect result. InceptionV3 grouped only 52 samples, so its smaller change represents a weaker perturbation and should be interpreted more cautiously.</div>
+      <div class="note"><strong>Scope.</strong> Feature-space pseudo-grouping is a leakage stress test and does not replace true sample-level, acquisition-session-level or independent external validation.</div>
+    </section>
 
-    <section id="group-aware"><h2 data-i18n="s6">6. Group-Aware Near-Duplicate Validation</h2><p data-i18n="groupIntro">Because physical-seed IDs and capture-session IDs are unavailable, feature-space pseudo-groups were constructed within each class. Features were L2-normalized, cosine similarity thresholds were screened, and connected examples were joined with Union-Find. Group label purity was asserted before evaluation. Models were evaluated with StratifiedGroupKFold using n_splits=5, shuffle=True, and random_state=42.</p><p class="notice" data-i18n="groupCaveat">Feature-space pseudo-grouping is a leakage stress test and does not replace true sample-level, acquisition-session-level, or external validation.</p><div class="table-scroll"><table><caption data-i18n="groupStatsCaption">Selected group statistics</caption><thead><tr><th data-i18n="statistic">Statistic</th><th>VGG16</th><th>InceptionV3</th></tr></thead><tbody><tr><th>Similarity threshold</th><td>0.9999</td><td>0.995</td></tr><tr><th>Total groups</th><td>9,232</td><td>10,082</td></tr><tr><th>Multi-sample groups</th><td>306</td><td>23</td></tr><tr><th>Samples in multi-sample groups</th><td>1,185</td><td>52</td></tr><tr><th>Grouped samples</th><td>11.72%</td><td>0.51%</td></tr><tr><th>Largest group</th><td>15</td><td>6</td></tr><tr><th>Mean multi-group size</th><td>3.87</td><td>2.26</td></tr><tr><th>Exact duplicate features</th><td>8</td><td>8</td></tr></tbody></table></div><div class="table-scroll"><table><caption data-i18n="groupResultCaption">Standard and group-aware estimates</caption><thead><tr><th>Model</th><th>Validation</th><th>Accuracy</th><th>Macro F1</th><th>Accuracy delta</th></tr></thead><tbody><tr><th>VGG16-MLP</th><td>Standard 10-fold CV</td><td>99.8318%</td><td>99.8340%</td><td>—</td></tr><tr><th>VGG16-MLP</th><td>Group-aware 5-fold CV</td><td>99.7429%</td><td>99.7416%</td><td>−0.0889 pp</td></tr><tr><th>InceptionV3-SVM</th><td>Standard 10-fold CV</td><td>99.6439%</td><td>99.6695%</td><td>—</td></tr><tr><th>InceptionV3-SVM</th><td>Group-aware 5-fold CV</td><td>99.6143%</td><td>99.6494%</td><td>−0.0296 pp</td></tr></tbody></table></div><p data-i18n="groupInterpretation">On the VGG16 side, 1,185 samples were affected by group constraints while the decrease remained below 0.1 percentage points. This suggests that simple near-duplicate leakage is unlikely to be the main explanation for the high result. InceptionV3 is more cautiously interpreted because only 52 samples entered multi-sample groups. These are group-aware validation estimates, not real-world accuracy.</p><div class="figure-grid"><figure><img src="assets/figures/group-aware/standard_vs_groupaware_accuracy.png" alt="Standard versus group-aware accuracy" loading="lazy"><figcaption data-i18n="groupAccuracyCaption">Standard versus group-aware accuracy.</figcaption></figure><figure><img src="assets/figures/group-aware/standard_vs_groupaware_f1.png" alt="Standard versus group-aware macro F1" loading="lazy"><figcaption data-i18n="groupF1Caption">Standard versus group-aware macro F1.</figcaption></figure></div></section>
+    <section id="discussion">
+      <h2 class="section-title">6. DISCUSSION</h2>
+      <p>The experiments show that fixed deep CNN representations contain highly discriminative information for the six seed classes. VGG16-MLP gave the strongest standard estimate, while linear SVM was most effective with InceptionV3. A larger descriptor was therefore not automatically superior.</p>
+      <p>If simple near-duplicate leakage were the dominant source of performance, constraining highly similar vectors to one fold would be expected to produce a substantial decrease. Instead, VGG16-MLP retained 99.7429% accuracy despite 1,185 observations belonging to multi-sample groups. Strong class separability and effective pretrained representations are more plausible explanations within the available data.</p>
+      <p>This conclusion remains conditional. Images from the same camera, background or lighting session can share nuisance patterns without exceeding a strict cosine threshold. Conversely, different images may become close in feature space. Thresholds that are too strict leave related observations as singletons; thresholds that are too permissive may merge broad within-class neighborhoods.</p>
+      <p>The high macro metrics and class-level error profile show that class imbalance alone does not explain the result. Groundnut contains nearly five times as many observations as white sesame, yet white sesame achieved perfect recall. Remaining errors are concentrated among visually related seed appearances rather than being distributed randomly.</p>
+    </section>
 
-    <section id="oof"><h2 data-i18n="s7">7. Out-of-Fold Analysis</h2><div class="metric-grid"><div><strong>10,111</strong><span data-i18n="totalSamples">Total samples</span></div><div><strong>10,094</strong><span data-i18n="correct">Correct predictions</span></div><div><strong>17</strong><span data-i18n="misclassified">Misclassified samples</span></div><div><strong>100%</strong><span data-i18n="whiteRecall">White sesame recall</span></div></div><p data-i18n="bestModel">Best standard model: VGG16-MLP</p><figure><img src="assets/figures/group-aware/cm_vgg16_mlp_groupaware.png" alt="VGG16 MLP group-aware out-of-fold confusion matrix" loading="lazy"><figcaption data-i18n="cmCaption">VGG16–MLP group-aware out-of-fold confusion matrix. Each sample is predicted only in its held-out group-aware fold.</figcaption></figure></section>
+    <section id="limitations">
+      <h2 class="section-title">7. LIMITATIONS AND FUTURE WORK</h2>
+      <p>The raw images were unavailable in the final publication rerun, so preprocessing and CNN inference were not repeated end to end. Physical-seed and acquisition-session identifiers were also absent. Labels confirm class counts but cannot prove exact row correspondence between independently saved VGG16 and InceptionV3 arrays.</p>
+      <p>The central remaining limitation is the absence of an independent external test set. A stronger experiment should reserve images collected in a new session using different cameras, illumination, backgrounds, distances and seed batches. These images must not participate in model selection or similarity-threshold selection.</p>
+      <p>A future acquisition protocol should record stable image paths, checksums, physical sample identifiers and session metadata. Performance should then be reported with per-class metrics, confidence intervals and an error analysis covering visually similar seeds, occlusion, background interference and scale change.</p>
+    </section>
 
-    <section id="architecture"><h2 data-i18n="s8">8. Repository Architecture</h2><pre class="tree">EdibleOilSeed/
-├── docs/
-│   ├── index.html
-│   ├── styles.css
-│   ├── script.js
-│   └── assets/
+    <section id="conclusion">
+      <h2 class="section-title">8. CONCLUSION</h2>
+      <p>A hybrid framework combining ImageNet-pretrained VGG16 and InceptionV3 representations with five machine learning classifiers was evaluated for six-class edible oil seed recognition. Under standard stratified 10-fold cross-validation, VGG16-MLP achieved 99.8318% accuracy and 99.8340% macro F1-score, with only 17 out-of-fold errors among 10,111 observations.</p>
+      <p>Class-wise cosine-similarity grouping and StratifiedGroupKFold produced 99.7429% accuracy for VGG16-MLP and 99.6143% for InceptionV3-SVM. The small decreases indicate that simple near-duplicate leakage was not the primary driver of performance within the saved feature spaces. These values remain internal estimates, not claims of universal real-world accuracy.</p>
+    </section>
+
+    <section id="repository">
+      <h2 class="section-title">9. PROJECT STRUCTURE</h2>
+      <p>The research workflow separates saved deep representations, classifier code, standard results and the additional group-aware validation outputs. The structure below summarizes the files associated with the study; the web page itself is intentionally self-contained.</p>
+      <pre class="repo-tree">EdibleOilSeed/
 ├── models/
 │   └── dl_features/
 │       ├── vgg16_features.npy
@@ -75,15 +239,40 @@
 │   ├── ml_classifiers.py
 │   ├── ml_inv3_classifiers.py
 │   └── group_aware_validation.py
-└── README.md</pre></section>
+├── docs/
+│   └── index.html
+└── README.md</pre>
+    </section>
 
-    <section id="manuscript"><h2 data-i18n="s9">9. Updated Research Manuscript</h2><p><cite>Classification of Edible Oil Seeds Using Hybrid Deep Learning and Machine Learning Methods</cite><br>Mahmut Esat Kolay · Murat Köklü</p><p data-i18n="manuscriptText">Research Article. The updated report presents the standard 10-fold summary together with the group-aware near-duplicate validation stress test. The repository project PDF is available below.</p><p><a class="button" href="https://github.com/MEK-0/EdibleOilSeed/blob/main/output2209/M%C3%BChTasar%C4%B1mRapor1.pdf?raw=1" data-i18n="openPdf">Open project manuscript PDF</a></p></section>
+    <section class="declarations">
+      <div><h2>ACKNOWLEDGMENT</h2><p>This study was developed within the scope of a TÜBİTAK 2209-A University Students Research Projects Support Program project. The official project number should be inserted before journal submission.</p></div>
+      <div><h2>CONFLICT OF INTEREST</h2><p>The authors declare that there is no known conflict of interest related to this study.</p></div>
+      <div><h2>AUTHOR CONTRIBUTIONS</h2><p>Conceptualization, methodology, software and experimental analysis: Mahmut Esat Kolay and Murat Köklü. Supervision and academic guidance: Murat Köklü. Writing and revision: Mahmut Esat Kolay and Murat Köklü.</p></div>
+      <div><h2>DATA AVAILABILITY</h2><p>The evaluation used saved VGG16 and InceptionV3 feature matrices and label arrays. Group identifiers, fold-level results and analysis scripts should be archived with the final manuscript.</p></div>
+    </section>
 
-    <section id="limitations"><h2 data-i18n="s10">10. Limitations and Future Work</h2><ul><li data-i18n="limit1">Raw images were not processed again in the final publication rerun.</li><li data-i18n="limit2">Physical-seed IDs and capture-session IDs are unavailable.</li><li data-i18n="limit3">Pseudo-grouping does not replace true acquisition grouping.</li><li data-i18n="limit4">An independent external test set is not yet included.</li><li data-i18n="limit5">Independent validation under different cameras, lighting, and backgrounds is needed.</li><li data-i18n="limit6">Results must not be interpreted as industrial deployment accuracy.</li></ul></section>
-
-    <section id="resources"><h2 data-i18n="s11">11. Resources</h2><ul class="resources"><li><a href="https://github.com/MEK-0/EdibleOilSeed">Project repository</a></li><li><a href="https://github.com/MEK-0/EdibleOilSeed/blob/main/results/group_aware/GROUP_AWARE_VALIDATION_REPORT.md">Group-aware validation report</a></li><li><a href="https://doi.org/10.17632/x7h34tkwcp.2">Edible Oil Seed Dataset (V2)</a></li><li><a href="https://github.com/MEK-0/EdibleOilSeed/tree/main/src">Source files</a></li></ul></section>
-  </main>
-  <footer><span data-i18n="footer">TÜBİTAK 2209-A research project · Selçuk University · Last updated: May 2026</span> · <a href="#top" data-i18n="backTop">Back to top</a></footer>
-</div>
+    <section class="references" id="references">
+      <h2>REFERENCES</h2>
+      <ol>
+        <li>S. Chordiya, A. Sardhara, S. Thite, and K. Patil, “Edible Oil Seed Dataset (V2),” Mendeley Data, 2025, doi: 10.17632/x7h34tkwcp.2.</li>
+        <li>A. Kamilaris and F. X. Prenafeta-Boldu, “Deep learning in agriculture: A survey,” Computers and Electronics in Agriculture, vol. 147, pp. 70–90, 2018.</li>
+        <li>R. Sharma, M. Kamthania, and S. Kumar, “A review of computer vision and machine learning applications in food and agriculture,” Multimedia Tools and Applications, 2023.</li>
+        <li>M. Koklu, S. Sarigil, and O. Ozbek, “The use of machine learning methods in classification of pumpkin seeds,” Genetic Resources and Crop Evolution, 2021.</li>
+        <li>M. Koklu, I. Cinar, and Y. S. Taspinar, “Classification of sunflower seeds using machine learning,” Journal of Food Process Engineering, 2021.</li>
+        <li>M. Koklu and I. A. Ozkan, “Multiclass classification of dry beans using computer vision and machine learning techniques,” Computers and Electronics in Agriculture, 2020.</li>
+        <li>I. Cinar, M. Koklu, and S. Tasdemir, “Classification of Raisin Grains Using Machine Vision and Artificial Intelligence Methods,” Gazi Journal of Engineering Sciences, 2020.</li>
+        <li>T. Celik, A. N. Gorgun, and B. Sahin, “Identification of sesame varieties by using machine learning algorithms and image processing,” Journal of Food Processing and Preservation, 2020.</li>
+        <li>Y. Gulzar et al., “A Convolution Neural Network-Based Seed Classification System,” Symmetry, vol. 12, 2020.</li>
+        <li>H. A. Fahim et al., “Seeds Classification Using Deep Neural Network: A Review,” Intelligent Computing and Optimization, 2023.</li>
+        <li>C. Shorten and T. M. Khoshgoftaar, “A survey on Image Data Augmentation for deep learning,” Journal of Big Data, 2019.</li>
+        <li>M. Hossin and M. N. Sulaiman, “A review on evaluation metrics for data classification evaluations,” International Journal of Data Mining & Knowledge Management Process, 2015.</li>
+        <li>Y. S. Jung, “Multiple predicting K-fold cross-validation for model selection,” Journal of Nonparametric Statistics, 2018.</li>
+        <li>R. K. Yates, M. A. Turner, and J. H. Moore, “A practical comparison of cross-validation techniques for machine learning in genomic data,” PeerJ, 2023.</li>
+        <li>Y. Wang, H. Zhuang, and S. C. Yoon, “Variety identification of peanut seeds using hyperspectral imaging and machine learning,” Journal of Food Composition and Analysis, 2022.</li>
+      </ol>
+    </section>
+    <footer><span>Edible Oil Seed Classification · Research Article Web Edition</span><a class="screen-only" href="#top">Back to top ↑</a></footer>
+  </article>
+</main>
 </body>
 </html>
